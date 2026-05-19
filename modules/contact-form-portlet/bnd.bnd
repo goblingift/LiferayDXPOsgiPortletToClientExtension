@@ -1,0 +1,5 @@
+Bundle-Name: Contact Form Portlet
+Bundle-SymbolicName: com.example.contactform
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.example.contactform.constants

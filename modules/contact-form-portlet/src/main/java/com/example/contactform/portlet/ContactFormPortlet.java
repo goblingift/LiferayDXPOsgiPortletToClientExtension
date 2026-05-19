@@ -6,6 +6,7 @@ import com.example.contactform.constants.ContactFormPortletKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.util.PortalUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -43,13 +45,26 @@ public class ContactFormPortlet extends MVCPortlet {
 		resourceResponse.setContentType("application/json");
 		resourceResponse.setCharacterEncoding("UTF-8");
 
+		String resourceID = resourceRequest.getResourceID();
+
+		if ("countryDetail".equals(resourceID)) {
+			_serveCountryDetail(resourceRequest, resourceResponse);
+		}
+		else {
+			_serveCountries(resourceResponse);
+		}
+	}
+
+	private void _serveCountries(ResourceResponse resourceResponse)
+		throws IOException {
+
 		List<String> countries = Collections.emptyList();
 
 		try {
 			countries = new CountryRestClient().fetchCountryNames();
 		}
 		catch (Exception e) {
-			_log.error("Failed to fetch countries from REST API", e);
+			_log.error("Failed to fetch country list", e);
 		}
 
 		StringBuilder json = new StringBuilder("[");
@@ -60,7 +75,10 @@ public class ContactFormPortlet extends MVCPortlet {
 			}
 
 			json.append("\"")
-				.append(countries.get(i).replace("\\", "\\\\").replace("\"", "\\\""))
+				.append(
+					countries.get(i)
+						.replace("\\", "\\\\")
+						.replace("\"", "\\\""))
 				.append("\"");
 		}
 
@@ -69,6 +87,42 @@ public class ContactFormPortlet extends MVCPortlet {
 		PrintWriter writer = resourceResponse.getWriter();
 
 		writer.write(json.toString());
+	}
+
+	private void _serveCountryDetail(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws IOException {
+
+		HttpServletRequest httpServletRequest =
+			PortalUtil.getHttpServletRequest(resourceRequest);
+
+		_log.info("QueryString: " + httpServletRequest.getQueryString());
+		_log.info("ResourceRequest params: " + resourceRequest.getParameterMap());
+		_log.info("HttpServletRequest params: " + httpServletRequest.getParameterMap());
+
+		String country = httpServletRequest.getParameter("country");
+
+		_log.info("Country detail requested. Parameter value: [" + country + "]");
+
+		String json = "{}";
+
+		if ((country != null) && !country.isEmpty()) {
+			try {
+				json = new CountryRestClient().fetchCountryDetails(country);
+				_log.info("Country detail fetched successfully for: " + country);
+			}
+			catch (Exception e) {
+				_log.error("Failed to fetch details for country: " + country, e);
+				json = "{\"error\":\"" + e.getMessage().replace("\"", "'") + "\"}";
+			}
+		}
+		else {
+			_log.warn("Country parameter was null or empty");
+		}
+
+		PrintWriter writer = resourceResponse.getWriter();
+
+		writer.write(json);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

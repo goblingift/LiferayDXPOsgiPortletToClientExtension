@@ -197,6 +197,7 @@ String successMessage = portletPreferences.getValue(
 									return /^[A-Za-z0-9\s\-]{3,10}$/.test(val.trim());
 								}
 							</aui:validator>
+							<%-- Germany PLZ blocking handled via submit listener in the PLZ IIFE below --%>
 						</aui:input>
 					</div>
 					<div class="col-sm-9">
@@ -512,5 +513,172 @@ String successMessage = portletPreferences.getValue(
 				loading.innerHTML = '<span class="text-danger">Failed to load country details.</span>';
 			});
 	});
+
+	// --- PLZ (postal code) live validation for Germany via OpenPLZ API ---
+	(function () {
+		var PLZ_COUNTRY  = 'Germany';
+		var PLZ_API_BASE = 'https://openplzapi.org/de/Localities?postalCode=';
+		var plzTimeout   = null;
+		var plzLastCode  = '';
+
+		window[ns + '_plzValid'] = null; // null=unchecked | true=valid | false=invalid
+
+		// Overlay the PLZ status icon inside the input using position:absolute.
+		// Using a plain wrapper div (not input-group) so the input keeps its full width
+		// and AUI required-error messages render correctly below it.
+		var postalInput = el('postalCode');
+		if (postalInput) {
+			var plzWrap = document.createElement('div');
+			plzWrap.className = 'cfp-plz-wrap';
+			postalInput.parentNode.insertBefore(plzWrap, postalInput);
+			plzWrap.appendChild(postalInput);
+
+			var plzIcon = document.createElement('span');
+			plzIcon.id        = ns + 'plzStatus';
+			plzIcon.className = 'cfp-plz-icon';
+			plzWrap.appendChild(plzIcon);
+
+			var plzLocality = document.createElement('small');
+			plzLocality.id        = ns + 'plzLocality';
+			plzLocality.className = 'cfp-plz-locality';
+			plzWrap.parentNode.insertBefore(plzLocality, plzWrap.nextSibling);
+		}
+
+		function setPlzStatus(state, localityName) {
+			window[ns + '_plzValid'] = (state === 'valid') ? true
+				: (state === 'invalid') ? false : null;
+
+			var icon     = document.getElementById(ns + 'plzStatus');
+			var locality = document.getElementById(ns + 'plzLocality');
+
+			if (!icon) return;
+
+			icon.className = 'cfp-plz-icon';
+
+			if (state === 'idle') {
+				icon.innerHTML = '';
+				if (locality) {
+					locality.className    = 'cfp-plz-locality';
+					locality.style.display = 'none';
+					locality.textContent  = '';
+				}
+			}
+			else if (state === 'checking') {
+				icon.classList.add('cfp-plz-checking');
+				icon.innerHTML = '<span class="glyphicon glyphicon-refresh spinning"></span>';
+				if (locality) { locality.style.display = 'none'; locality.textContent = ''; }
+			}
+			else if (state === 'valid') {
+				icon.classList.add('cfp-plz-valid');
+				icon.innerHTML = '<span class="glyphicon glyphicon-ok-sign"></span>';
+				if (locality) {
+					locality.className    = 'cfp-plz-locality cfp-plz-locality--valid';
+					locality.textContent  = localityName || '';
+					locality.style.display = localityName ? 'block' : 'none';
+				}
+			}
+			else if (state === 'invalid') {
+				icon.classList.add('cfp-plz-invalid');
+				icon.innerHTML = '<span class="glyphicon glyphicon-remove-sign"></span>';
+				if (locality) {
+					locality.className    = 'cfp-plz-locality cfp-plz-locality--error';
+					locality.textContent  = '<%= LanguageUtil.get(request, "validation-postal-code-de") %>';
+					locality.style.display = 'block';
+				}
+			}
+		}
+
+		function checkPlz(code) {
+			setPlzStatus('checking');
+
+			fetch(PLZ_API_BASE + encodeURIComponent(code))
+				.then(function (res) { return res.json(); })
+				.then(function (data) {
+					if (Array.isArray(data) && data.length > 0) {
+						var cityName = data[0].name || '';
+						setPlzStatus('valid', cityName);
+
+						// Auto-fill city field with the first locality name from the API
+						var cityInput = el('city');
+						if (cityInput && cityName) {
+							cityInput.value = cityName;
+							cityInput.dispatchEvent(new Event('input',  { bubbles: true }));
+							cityInput.dispatchEvent(new Event('change', { bubbles: true }));
+						}
+					}
+					else {
+						setPlzStatus('invalid');
+					}
+				})
+				.catch(function () {
+					setPlzStatus('idle'); // API unreachable — don't block user
+				});
+		}
+
+		function triggerPlzCheck() {
+			var countryEl = document.getElementById(ns + 'country');
+			var postal    = el('postalCode');
+
+			if (!countryEl || !postal) return;
+
+			var country = countryEl.value;
+			var code    = postal.value.trim();
+
+			if (country !== PLZ_COUNTRY) {
+				setPlzStatus('idle');
+				return;
+			}
+
+			if (!code || code.length < 3) {
+				setPlzStatus('idle');
+				return;
+			}
+
+			if (code === plzLastCode) return;
+			plzLastCode = code;
+
+			clearTimeout(plzTimeout);
+			plzTimeout = setTimeout(function () { checkPlz(code); }, 550);
+		}
+
+		document.addEventListener('change', function (e) {
+			var id = e.target.id;
+			if (id === ns + 'country' || id === ns + 'postalCode') {
+				plzLastCode = ''; // reset so same code re-triggers when country switches
+				triggerPlzCheck();
+			}
+		});
+
+		document.addEventListener('input', function (e) {
+			if (e.target.id === ns + 'postalCode') {
+				triggerPlzCheck();
+			}
+		});
+
+		// Block form submission when Germany is selected and PLZ is confirmed invalid.
+		// This replaces the aui:validator approach to avoid showing a duplicate message.
+		var formEl = document.getElementById(ns + 'fm');
+		if (formEl) {
+			formEl.addEventListener('submit', function (e) {
+				var countryEl = document.getElementById(ns + 'country');
+				var isGermany = countryEl && countryEl.value === 'Germany';
+
+				if (isGermany && window[ns + '_plzValid'] === false) {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+
+					// Re-assert the error state so the indicator is clearly visible
+					setPlzStatus('invalid');
+
+					var postalInput = el('postalCode');
+					if (postalInput) {
+						postalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						postalInput.focus();
+					}
+				}
+			});
+		}
+	})();
+
 })();
 </aui:script>

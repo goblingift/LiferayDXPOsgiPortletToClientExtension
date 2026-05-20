@@ -187,6 +187,53 @@
 	text-align: center;
 }
 
+/* ---------- PLZ live validation (Germany) ---------- */
+
+/* Wrapper: relative positioning so the icon can float inside the right edge */
+.cfp-plz-wrap {
+	position: relative;
+	display: block;
+}
+
+/* Give the input some right padding so text doesn't run under the icon */
+.cfp-plz-wrap .form-control {
+	padding-right: 34px;
+}
+
+/* Absolutely-positioned icon overlaid inside the input's right edge */
+.cfp-plz-icon {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	font-size: 18px;
+	line-height: 1;
+	pointer-events: none;
+	display: none; /* hidden until a state is set */
+}
+
+.cfp-plz-icon.cfp-plz-checking,
+.cfp-plz-icon.cfp-plz-valid,
+.cfp-plz-icon.cfp-plz-invalid {
+	display: inline-block;
+}
+
+.cfp-plz-checking { color: #bbb; font-size: 14px; }
+.cfp-plz-valid    { color: #27ae60; }
+.cfp-plz-invalid  { color: #c0392b; }
+
+/* Locality / error text shown below the input */
+.cfp-plz-locality {
+	display: none;
+	font-size: 11px;
+	font-weight: 600;
+	margin-top: 4px;
+}
+
+.cfp-plz-locality--valid { color: #27ae60; }
+.cfp-plz-locality--error { color: #c0392b; }
+
 /* ---------- country loading ---------- */
 
 .cfp-fetching {

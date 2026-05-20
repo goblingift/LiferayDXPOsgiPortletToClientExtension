@@ -37,6 +37,8 @@ import org.osgi.service.component.annotations.Component;
 )
 public class ContactFormPortlet extends MVCPortlet {
 
+	// Form submission is handled by SubmitContactFormMVCActionCommand.
+
 	@Override
 	public void serveResource(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -96,20 +98,15 @@ public class ContactFormPortlet extends MVCPortlet {
 		HttpServletRequest httpServletRequest =
 			PortalUtil.getHttpServletRequest(resourceRequest);
 
-		_log.info("QueryString: " + httpServletRequest.getQueryString());
-		_log.info("ResourceRequest params: " + resourceRequest.getParameterMap());
-		_log.info("HttpServletRequest params: " + httpServletRequest.getParameterMap());
-
 		String country = httpServletRequest.getParameter("country");
 
-		_log.info("Country detail requested. Parameter value: [" + country + "]");
+		_log.info("Country detail requested: [" + country + "]");
 
 		String json = "{}";
 
 		if ((country != null) && !country.isEmpty()) {
 			try {
 				json = new CountryRestClient().fetchCountryDetails(country);
-				_log.info("Country detail fetched successfully for: " + country);
 			}
 			catch (Exception e) {
 				_log.error("Failed to fetch details for country: " + country, e);

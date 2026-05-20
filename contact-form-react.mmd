@@ -1,0 +1,42 @@
+graph LR
+    ROOT(["<b>contact-form-react</b><br/>Custom Element Client Extension"])
+
+    subgraph BUILD["Build & Config"]
+        YAML["<b>client-extension.yaml</b><br/>Declares the custom element for Liferay:<br/>type, JS/CSS asset URLs, portlet category"]
+        PKG["<b>package.json</b><br/>Npm project manifest — React & i18next<br/>dependencies and Webpack build scripts"]
+        GRADLE["<b>build.gradle</b><br/>Wires the npm build output into the<br/>Liferay Gradle workspace"]
+        DEPLOY["<b>deploy.sh</b><br/>Convenience script to build and copy<br/>the deployment zip to Liferay"]
+    end
+
+    subgraph SRC["src/"]
+        INDEX["<b>index.js</b><br/>Web Component entry point — defines and<br/>registers the custom HTML element"]
+        APP["<b>ContactFormApp.js</b><br/>Core React component: multi-step form,<br/>field validation, country & PLZ API calls"]
+        STYLE["<b>contact-form.css</b><br/>All scoped CSS styles for<br/>the multi-step form UI"]
+
+        subgraph COMPONENTS["src/components/"]
+            CDETAIL["<b>CountryDetail.js</b><br/>Renders a country info panel<br/>(flag, capital, population) on selection"]
+            CSUCCESS["<b>SuccessView.js</b><br/>Thank-you screen shown after<br/>a successful form submission"]
+        end
+
+        subgraph I18N["src/i18n/"]
+            I18NIDX["<b>index.js</b><br/>Bootstraps i18next and imports<br/>all locale translation JSON files"]
+            EN["<b>en/translation.json</b><br/>English UI strings"]
+            DE["<b>de/translation.json</b><br/>German UI strings"]
+            DA["<b>da/translation.json</b><br/>Danish UI strings"]
+            FR["<b>fr/translation.json</b><br/>French UI strings"]
+        end
+    end
+
+    ROOT --> BUILD
+    ROOT --> SRC
+    SRC --> COMPONENTS
+    SRC --> I18N
+
+    INDEX -->|"mounts"| APP
+    APP -->|"renders"| CDETAIL
+    APP -->|"shows on submit"| CSUCCESS
+    APP -->|"translates via"| I18NIDX
+    I18NIDX --> EN
+    I18NIDX --> DE
+    I18NIDX --> DA
+    I18NIDX --> FR

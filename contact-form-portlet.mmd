@@ -1,0 +1,57 @@
+graph LR
+    ROOT(["<b>contact-form-portlet</b><br/>Liferay OSGi MVC Portlet Module"])
+
+    subgraph BUILD["Build & Config"]
+        BND["<b>bnd.bnd</b><br/>OSGi bundle manifest: name, symbolic<br/>name, version, exported packages"]
+        GRADLE["<b>build.gradle</b><br/>Gradle dependencies for portal-kernel<br/>and Liferay MVC bridges"]
+    end
+
+    subgraph JAVA["src/main/java/"]
+        KEYS["<b>ContactFormPortletKeys.java</b><br/>Portlet name constant used in all<br/>OSGi @Component annotations"]
+
+        subgraph PORTLETPKG["portlet/"]
+            PORTLET["<b>ContactFormPortlet.java</b><br/>Main MVCPortlet: serves country list<br/>and detail data as JSON via resource requests"]
+            SUBMIT["<b>SubmitContactFormMVCActionCommand.java</b><br/>Processes form POST — maps fields to DTOs,<br/>enriches data, and logs the result"]
+            CONFACTION["<b>ContactFormConfigurationAction.java</b><br/>Handles the portlet configuration panel<br/>(Look and Feel → Configuration)"]
+        end
+
+        subgraph CLIENTPKG["client/"]
+            RESTCLIENT["<b>CountryRestClient.java</b><br/>HTTP client that fetches country names<br/>and details from restcountries.com"]
+        end
+
+        subgraph DTOPKG["dto/"]
+            FORMDTO["<b>ContactFormDTO.java</b><br/>Raw form DTO — mirrors HTML<br/>form fields one-to-one"]
+            APPDTO["<b>ContactApplicationDTO.java</b><br/>Enriched DTO: computed age, normalised<br/>phone/email, EUR to USD income conversion"]
+        end
+    end
+
+    subgraph RESOURCES["src/main/resources/"]
+        subgraph JSPS["META-INF/resources/"]
+            VIEW["<b>view.jsp</b><br/>Main portlet render template —<br/>the contact form HTML and JavaScript"]
+            INIT["<b>init.jsp</b><br/>Shared JSP imports and taglib<br/>declarations for all JSP views"]
+            CONFJSP["<b>configuration.jsp</b><br/>Portlet configuration UI template<br/>(API URL setting)"]
+            CSS["<b>contact-form.css</b><br/>All portlet-scoped CSS styles"]
+        end
+
+        subgraph CONTENT["content/"]
+            LANG["<b>Language.properties</b><br/>Default (English) i18n message keys"]
+            LANGDE["<b>Language_de.properties</b><br/>German translations"]
+            LANGDA["<b>Language_da.properties</b><br/>Danish translations"]
+            LANGFR["<b>Language_fr.properties</b><br/>French translations"]
+        end
+    end
+
+    ROOT --> BUILD
+    ROOT --> JAVA
+    ROOT --> RESOURCES
+    JAVA --> PORTLETPKG
+    JAVA --> CLIENTPKG
+    JAVA --> DTOPKG
+
+    PORTLET -->|"calls"| RESTCLIENT
+    SUBMIT -->|"builds"| FORMDTO
+    SUBMIT -->|"converts to"| APPDTO
+    VIEW -->|"includes"| INIT
+    CONFJSP -->|"includes"| INIT
+    PORTLET -.->|"registers with"| KEYS
+    SUBMIT -.->|"registers with"| KEYS

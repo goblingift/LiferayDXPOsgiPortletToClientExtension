@@ -1,0 +1,455 @@
+/* ==========================================================================
+   Contact Form React — Hays-inspired design
+   Scoped under .cfp-wrap; Bootstrap grid/forms available from Liferay portal.
+   ========================================================================== */
+
+/* ---------- animations ---------- */
+
+@keyframes cfp-pulse {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0.3; }
+}
+
+@keyframes cfp-check-pop {
+	0%   { transform: scale(0.25); opacity: 0; }
+	65%  { transform: scale(1.12); }
+	100% { transform: scale(1);    opacity: 1; }
+}
+
+@keyframes cfp-fade-up {
+	from { opacity: 0; transform: translateY(18px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.spinning {
+	animation: spin 1s linear infinite;
+	margin-right: 4px;
+	display: inline-block;
+}
+
+/* ---------- wrapper ---------- */
+
+.cfp-wrap {
+	max-width: 900px;
+	font-family: inherit;
+}
+
+/* ---------- page header (Hays clean style) ---------- */
+
+.cfp-page-header {
+	margin-bottom: 20px;
+}
+
+.cfp-page-title {
+	font-size: 26px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 6px;
+	line-height: 1.25;
+	border: none;
+}
+
+.cfp-page-subtitle {
+	font-size: 13px;
+	color: #666;
+	margin: 0;
+}
+
+/* ---------- Hays-style category tabs ---------- */
+
+.cfp-tabs {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+	margin-bottom: 28px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #e4e4e4;
+}
+
+.cfp-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 14px;
+	font-size: 13px;
+	font-weight: 500;
+	background: #eef3f8;
+	border: 1px solid #c5d7e8;
+	border-radius: 3px;
+	color: #007ac3;
+	white-space: nowrap;
+	user-select: none;
+}
+
+.cfp-tab.active {
+	background: #007ac3;
+	border-color: #007ac3;
+	color: #fff;
+}
+
+.cfp-tab .cfp-tab-num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.12);
+	font-size: 10px;
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+.cfp-tab.active .cfp-tab-num {
+	background: rgba(255, 255, 255, 0.28);
+}
+
+/* ---------- form sections ---------- */
+
+.cfp-section {
+	margin-bottom: 32px;
+}
+
+.cfp-section-title {
+	font-size: 15px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 18px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+/* ---------- inputs (clean, Hays-like) ---------- */
+
+.cfp-wrap .form-group > label.control-label {
+	font-size: 13px;
+	font-weight: 400;
+	color: #444;
+	margin-bottom: 5px;
+}
+
+.cfp-wrap .form-control {
+	border: 1px solid #c8c8c8;
+	border-radius: 2px;
+	padding: 9px 12px;
+	font-size: 14px;
+	color: #333;
+	height: 40px;
+	box-shadow: none;
+	transition: border-color 0.15s;
+}
+
+.cfp-wrap .form-control:focus {
+	border-color: #007ac3;
+	box-shadow: 0 0 0 2px rgba(0, 122, 195, 0.12);
+	outline: none;
+}
+
+.cfp-wrap select.form-control {
+	height: 40px;
+}
+
+.cfp-wrap textarea.form-control {
+	height: auto;
+	min-height: 80px;
+}
+
+/* Validation error state on inputs */
+.cfp-wrap .cfp-input-error {
+	border-color: #c0392b;
+	background: #fff8f8;
+}
+
+.cfp-wrap .cfp-input-error:focus {
+	border-color: #c0392b;
+	box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.12);
+}
+
+/* Field-level error text */
+.cfp-field-error {
+	display: block;
+	font-size: 11px;
+	color: #c0392b;
+	margin-top: 4px;
+	font-weight: 500;
+}
+
+/* ---------- income input-group (Euro addon) ---------- */
+
+.cfp-income-addon {
+	background: #f5f5f5;
+	color: #888;
+	border: 1px solid #c8c8c8;
+	border-right: none;
+	border-radius: 2px 0 0 2px;
+	padding: 0 12px;
+	height: 40px;
+	line-height: 38px;
+	font-size: 14px;
+}
+
+.cfp-wrap .input-group .form-control {
+	border-radius: 0 2px 2px 0;
+	height: 40px;
+}
+
+/* ---------- country loading ---------- */
+
+.cfp-fetching {
+	animation: cfp-pulse 1.2s ease-in-out infinite;
+	color: #888;
+	font-style: italic;
+	font-size: 0.9em;
+	padding: 6px 0;
+}
+
+/* ---------- PLZ live validation ---------- */
+
+.cfp-plz-wrap {
+	position: relative;
+	display: block;
+}
+
+.cfp-plz-wrap .form-control {
+	padding-right: 34px;
+}
+
+.cfp-plz-icon {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 18px;
+	line-height: 1;
+	pointer-events: none;
+	display: none;
+}
+
+.cfp-plz-icon.cfp-plz-checking,
+.cfp-plz-icon.cfp-plz-valid,
+.cfp-plz-icon.cfp-plz-invalid {
+	display: inline-block;
+}
+
+.cfp-plz-checking { color: #bbb; font-size: 14px; }
+.cfp-plz-valid    { color: #27ae60; }
+.cfp-plz-invalid  { color: #c0392b; }
+
+.cfp-plz-locality {
+	display: none;
+	font-size: 11px;
+	font-weight: 600;
+	margin-top: 4px;
+}
+
+.cfp-plz-locality--valid { color: #27ae60; }
+.cfp-plz-locality--error { color: #c0392b; }
+
+/* ---------- country detail panel ---------- */
+
+.cfp-country-detail {
+	margin-top: 16px;
+	border: 1px solid #d6e4ef;
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.cfp-detail-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 18px;
+	background: #eaf4fb;
+	border-bottom: 1px solid #d6e4ef;
+}
+
+.cfp-flag {
+	height: 52px;
+	object-fit: contain;
+	border: 1px solid #c9d9e8;
+	border-radius: 2px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.cfp-coat {
+	max-height: 72px;
+	object-fit: contain;
+}
+
+.cfp-info-table {
+	margin-bottom: 0;
+}
+
+.cfp-info-table > tbody > tr > td:first-child {
+	font-weight: 600;
+	white-space: nowrap;
+	padding-right: 20px;
+	color: #555;
+	width: 110px;
+}
+
+.cfp-border-badge {
+	display: inline-block;
+	background: #e8eef3;
+	color: #4a6278;
+	font-size: 0.72em;
+	font-weight: 700;
+	padding: 2px 8px;
+	border-radius: 2px;
+	margin: 2px 2px 2px 0;
+	letter-spacing: 0.4px;
+	border: 1px solid #ccd9e3;
+}
+
+/* ---------- form footer (right-aligned dark submit) ---------- */
+
+.cfp-form-footer {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 20px;
+	padding-top: 20px;
+	margin-top: 8px;
+	border-top: 1px solid #e4e4e4;
+}
+
+.cfp-required-note {
+	font-size: 12px;
+	color: #999;
+	margin: 0;
+}
+
+.cfp-btn-senden {
+	background: #1a1a1a;
+	color: #fff;
+	border: none;
+	padding: 11px 44px;
+	font-size: 15px;
+	font-weight: 600;
+	border-radius: 2px;
+	letter-spacing: 0.3px;
+	cursor: pointer;
+	transition: background 0.15s;
+}
+
+.cfp-btn-senden:hover,
+.cfp-btn-senden:focus {
+	background: #333;
+	color: #fff;
+	outline: none;
+}
+
+/* ==========================================================================
+   SUCCESS STATE
+   ========================================================================== */
+
+.cfp-success-page-header {
+	background: #1a1a1a;
+	color: #fff;
+	padding: 20px 28px;
+	border-radius: 4px 4px 0 0;
+}
+
+.cfp-success-page-header h2 {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: #fff;
+	border: none;
+}
+
+.cfp-success-card {
+	background: #fff;
+	border: 1px solid #dde3e8;
+	border-top: 4px solid #27ae60;
+	border-radius: 0 0 4px 4px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	padding: 0 40px 48px;
+	text-align: center;
+}
+
+.cfp-checkmark-wrap {
+	padding: 44px 0 30px;
+}
+
+.cfp-checkmark-circle {
+	width: 92px;
+	height: 92px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #27ae60, #2ecc71);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 10px 32px rgba(39, 174, 96, 0.38);
+	animation: cfp-check-pop 0.45s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+}
+
+.cfp-checkmark-icon {
+	color: #fff;
+	font-size: 42px;
+	line-height: 1;
+}
+
+.cfp-success-title {
+	color: #1a252f;
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0 0 20px;
+	animation: cfp-fade-up 0.4s ease 0.2s both;
+}
+
+.cfp-success-message-box {
+	background: #f0fdf4;
+	border: 1px solid #bbf7d0;
+	border-left: 4px solid #22c55e;
+	border-radius: 3px;
+	padding: 16px 24px;
+	max-width: 540px;
+	margin: 0 auto 32px;
+	text-align: left;
+	animation: cfp-fade-up 0.4s ease 0.3s both;
+}
+
+.cfp-success-message-box p {
+	color: #166534;
+	font-size: 14px;
+	line-height: 1.65;
+	margin: 0;
+}
+
+.cfp-success-divider {
+	border: none;
+	border-top: 1px solid #eef0f2;
+	margin: 0 0 28px;
+}
+
+.cfp-btn-reset {
+	min-width: 220px;
+	padding: 11px 36px;
+	font-size: 15px;
+	font-weight: 600;
+	background: #1a1a1a;
+	color: #fff;
+	border: none;
+	border-radius: 2px;
+	letter-spacing: 0.3px;
+	cursor: pointer;
+	animation: cfp-fade-up 0.4s ease 0.42s both;
+	transition: background 0.15s;
+}
+
+.cfp-btn-reset:hover,
+.cfp-btn-reset:focus {
+	background: #333;
+	color: #fff;
+	outline: none;
+}
+
+.cfp-btn-reset .glyphicon {
+	margin-right: 8px;
+}

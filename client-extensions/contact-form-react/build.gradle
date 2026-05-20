@@ -1,0 +1,81 @@
+// Contact Form React — Client Extension build file.
+//
+// The Liferay workspace plugin (15.x) handles the full build pipeline:
+//   - downloads Node.js
+//   - runs npm install (via yarn)
+//   - runs the npm build script
+//   - packages everything into dist/contact-form-react.zip
+//     (with resolved filenames + OSGi config JSON that Liferay needs)
+//
+// Our only custom tasks are:
+//   cleanStatic  — removes stale build/static/ files before a new build
+//   deployCX     — extracts dist/contact-form-react.zip into the Liferay
+//                  client-extensions shared volume folder
+
+def liferayCxDir = '/Users/goblingift/Development/liferay/client-extensions'
+
+// ---- Clean stale build output ----
+// Prevents multiple hashed JS/CSS files accumulating in build/static/,
+// which would cause the workspace plugin to include all of them in the zip.
+
+tasks.register('cleanStatic') {
+	description 'Deletes build/static/ so only the current build output is packaged.'
+
+	doLast {
+		def staticDir = file('build/static')
+		if (staticDir.exists()) {
+			staticDir.deleteDir()
+			println "Cleaned: ${staticDir}"
+		}
+	}
+}
+
+// Make the npm build always start with a clean static directory
+tasks.named('npmInstall').configure {
+	dependsOn 'cleanStatic'
+}
+
+// ---- Deploy to Liferay ----
+// Extracts the workspace-plugin-generated zip into the Liferay
+// client-extensions directory. The zip already contains the
+// OSGi configurator JSON that Liferay 7.4 requires.
+
+tasks.register('deployCX') {
+	description "Extracts dist/contact-form-react.zip into ${liferayCxDir}."
+	dependsOn   'build'   // triggers workspace plugin packaging → dist/
+
+	doLast {
+		def zip = file('dist/contact-form-react.zip')
+
+		if (!zip.exists()) {
+			throw new GradleException(
+				"dist/contact-form-react.zip not found.\n" +
+				"Run the 'build' task first so the workspace plugin can package the extension."
+			)
+		}
+
+		def targetRoot = file(liferayCxDir)
+		if (!targetRoot.exists()) {
+			throw new GradleException(
+				"Deploy directory not found: ${liferayCxDir}\n" +
+				"Is Liferay accessible via the shared volume?"
+			)
+		}
+
+		def targetDir = new File(targetRoot, 'contact-form-react')
+		targetDir.deleteDir()
+
+		copy {
+			from zipTree(zip)
+			into targetDir
+		}
+
+		println ""
+		println "Deployed → ${targetDir}"
+		println ""
+		println "Deployed files:"
+		fileTree(targetDir).each { f -> println "  ${f.name}" }
+		println ""
+		println "Watch for: STARTED contact-form-react in Liferay logs."
+	}
+}

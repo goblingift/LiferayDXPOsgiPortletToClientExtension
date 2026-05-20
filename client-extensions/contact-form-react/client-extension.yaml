@@ -1,0 +1,16 @@
+assemble:
+    - from: build/static
+      into: static
+
+contact-form-react:
+    cssURLs:
+        - index.*.css
+    friendlyURLMapping: contact-form-react
+    htmlElementName: contact-form-react
+    instanceable: true
+    name: Contact Form React
+    portletCategoryName: category.client-extensions
+    type: customElement
+    urls:
+        - index.*.js
+    useESM: false

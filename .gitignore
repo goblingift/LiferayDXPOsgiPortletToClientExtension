@@ -27,3 +27,5 @@ replay_pid*
 /.idea
 /modules/contact-form-portlet/build
 /build
+/node_modules_cache
+/node_modules

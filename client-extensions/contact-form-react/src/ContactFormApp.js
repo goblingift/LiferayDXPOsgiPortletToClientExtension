@@ -303,8 +303,11 @@ export default function ContactFormApp({ successMessage }) {
 			<form noValidate onSubmit={handleSubmit}>
 
 				{/* ===== SECTION 1: PERSONAL INFORMATION ===== */}
-				<div className="cfp-section" onFocus={() => setActiveSection(0)}>
-					<h3 className="cfp-section-title">Personal Information</h3>
+				<div className="cfp-section cfp-section-personal" onFocus={() => setActiveSection(0)}>
+					<h3 className="cfp-section-title">
+						<span className="cfp-section-num">1</span>
+						Personal Information
+					</h3>
 
 					<div className="row">
 						<div className="col-sm-6">
@@ -338,8 +341,11 @@ export default function ContactFormApp({ successMessage }) {
 				</div>
 
 				{/* ===== SECTION 2: ADDRESS ===== */}
-				<div className="cfp-section" onFocus={() => setActiveSection(1)}>
-					<h3 className="cfp-section-title">Address</h3>
+				<div className="cfp-section cfp-section-address" onFocus={() => setActiveSection(1)}>
+					<h3 className="cfp-section-title">
+						<span className="cfp-section-num">2</span>
+						Address
+					</h3>
 
 					<div className="row">
 						<div className="col-sm-8">
@@ -430,8 +436,11 @@ export default function ContactFormApp({ successMessage }) {
 				</div>
 
 				{/* ===== SECTION 3: EMPLOYMENT & FINANCES ===== */}
-				<div className="cfp-section" onFocus={() => setActiveSection(2)}>
-					<h3 className="cfp-section-title">Employment & Finances</h3>
+				<div className="cfp-section cfp-section-employment" onFocus={() => setActiveSection(2)}>
+					<h3 className="cfp-section-title">
+						<span className="cfp-section-num">3</span>
+						Employment &amp; Finances
+					</h3>
 
 					<div className="row">
 						<div className="col-sm-6">
@@ -486,12 +495,12 @@ export default function ContactFormApp({ successMessage }) {
 
 				{/* Submit footer */}
 				<div className="cfp-form-footer">
-					<p className="cfp-required-note">
-						<span className="text-danger">*</span> Required fields
-					</p>
 					<button className="cfp-btn-senden" type="submit">
 						Submit
 					</button>
+					<p className="cfp-required-note">
+						<span className="text-danger">*</span> Required fields
+					</p>
 				</div>
 
 			</form>

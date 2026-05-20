@@ -39,57 +39,61 @@
 	font-family: inherit;
 }
 
-/* ---------- page header (Hays clean style) ---------- */
+/* ---------- page header (gradient banner, matches portlet style) ---------- */
 
 .cfp-page-header {
-	margin-bottom: 20px;
+	background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+	padding: 14px 20px;
+	border-radius: 3px;
+	margin-bottom: 16px;
 }
 
 .cfp-page-title {
-	font-size: 26px;
+	font-size: 20px;
 	font-weight: 700;
-	color: #1a1a1a;
-	margin: 0 0 6px;
+	color: #fff;
+	margin: 0 0 3px;
 	line-height: 1.25;
 	border: none;
 }
 
 .cfp-page-subtitle {
-	font-size: 13px;
-	color: #666;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.82);
 	margin: 0;
 }
 
-/* ---------- Hays-style category tabs ---------- */
+/* ---------- Step tabs (underline style, matches portlet) ---------- */
 
 .cfp-tabs {
 	display: flex;
-	gap: 6px;
+	gap: 0;
 	flex-wrap: wrap;
 	margin-bottom: 28px;
-	padding-bottom: 20px;
-	border-bottom: 1px solid #e4e4e4;
+	padding-bottom: 0;
+	border-bottom: 1px solid #d8d8d8;
 }
 
 .cfp-tab {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	padding: 7px 14px;
+	padding: 9px 18px;
 	font-size: 13px;
 	font-weight: 500;
-	background: #eef3f8;
-	border: 1px solid #c5d7e8;
-	border-radius: 3px;
-	color: #007ac3;
+	background: transparent;
+	border: none;
+	border-bottom: 3px solid transparent;
+	border-radius: 0;
+	color: #aaa;
 	white-space: nowrap;
 	user-select: none;
+	margin-bottom: -1px;
 }
 
 .cfp-tab.active {
-	background: #007ac3;
-	border-color: #007ac3;
-	color: #fff;
+	color: #007ac3;
+	border-bottom-color: #007ac3;
 }
 
 .cfp-tab .cfp-tab-num {
@@ -99,14 +103,15 @@
 	width: 18px;
 	height: 18px;
 	border-radius: 50%;
-	background: rgba(0, 0, 0, 0.12);
+	background: #ccc;
+	color: #fff;
 	font-size: 10px;
 	font-weight: 700;
 	flex-shrink: 0;
 }
 
 .cfp-tab.active .cfp-tab-num {
-	background: rgba(255, 255, 255, 0.28);
+	background: #007ac3;
 }
 
 /* ---------- form sections ---------- */
@@ -116,13 +121,29 @@
 }
 
 .cfp-section-title {
-	font-size: 15px;
+	font-size: 13px;
 	font-weight: 700;
-	color: #1a1a1a;
+	color: #333;
 	margin: 0 0 18px;
 	padding-bottom: 10px;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 3px solid #e0e0e0;
+	text-transform: uppercase;
+	letter-spacing: 0.6px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
+
+.cfp-section-num {
+	font-size: 13px;
+	font-weight: 700;
+	color: #555;
+}
+
+/* Colored bottom border per section */
+.cfp-section-personal .cfp-section-title { border-bottom-color: #3498db; }
+.cfp-section-address  .cfp-section-title { border-bottom-color: #5cb85c; }
+.cfp-section-employment .cfp-section-title { border-bottom-color: #f0ad4e; }
 
 /* ---------- inputs (clean, Hays-like) ---------- */
 
@@ -306,13 +327,14 @@
 	border: 1px solid #ccd9e3;
 }
 
-/* ---------- form footer (right-aligned dark submit) ---------- */
+/* ---------- form footer (centered blue submit) ---------- */
 
 .cfp-form-footer {
 	display: flex;
-	justify-content: flex-end;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
-	gap: 20px;
+	gap: 10px;
 	padding-top: 20px;
 	margin-top: 8px;
 	border-top: 1px solid #e4e4e4;
@@ -325,7 +347,7 @@
 }
 
 .cfp-btn-senden {
-	background: #1a1a1a;
+	background: #3498db;
 	color: #fff;
 	border: none;
 	padding: 11px 44px;
@@ -339,7 +361,7 @@
 
 .cfp-btn-senden:hover,
 .cfp-btn-senden:focus {
-	background: #333;
+	background: #2980b9;
 	color: #fff;
 	outline: none;
 }

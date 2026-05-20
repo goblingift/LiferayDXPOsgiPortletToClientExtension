@@ -46,6 +46,9 @@ public class SubmitContactFormMVCActionCommand extends BaseMVCActionCommand {
 
 		// Step 3 — log the fully converted application DTO
 		_logApplicationDTO(applicationDTO);
+
+		// Step 4 — signal the render phase to show the success state
+		actionResponse.setRenderParameter("submitted", "true");
 	}
 
 	// ---- Step 1: form DTO assembly ----

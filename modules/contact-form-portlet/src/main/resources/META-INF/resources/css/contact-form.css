@@ -1,0 +1,422 @@
+/* ==========================================================================
+   Contact Form Portlet — component styles
+   Scoped under .cfp-wrap to avoid polluting global page styles.
+   ========================================================================== */
+
+/* ---------- animations ---------- */
+
+@keyframes cfp-pulse {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0.3; }
+}
+
+@-webkit-keyframes spin {
+	0%   { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.spinning {
+	-webkit-animation: spin 1s linear infinite;
+	animation: spin 1s linear infinite;
+	margin-right: 4px;
+}
+
+/* ---------- wrapper ---------- */
+
+.cfp-wrap {
+	max-width: 900px;
+}
+
+/* ---------- form header ---------- */
+
+.cfp-header {
+	background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+	color: #fff;
+	border-radius: 8px 8px 0 0;
+	padding: 28px 32px 24px;
+	margin-bottom: 0;
+}
+
+.cfp-header h2 {
+	margin: 0 0 6px;
+	font-size: 22px;
+	font-weight: 700;
+	color: #fff;
+	border: none;
+}
+
+.cfp-header p {
+	margin: 0;
+	opacity: 0.82;
+	font-size: 13px;
+}
+
+.cfp-header .glyphicon {
+	margin-right: 8px;
+	font-size: 20px;
+	vertical-align: middle;
+}
+
+/* ---------- step tracker ---------- */
+
+.cfp-steps {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	background: #ecf0f1;
+	border-left: 1px solid #dce1e4;
+	border-right: 1px solid #dce1e4;
+	padding: 0;
+	margin: 0 0 20px;
+	list-style: none;
+}
+
+.cfp-steps li {
+	-webkit-box-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+	text-align: center;
+	padding: 10px 8px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #95a5a6;
+	border-bottom: 3px solid transparent;
+	-webkit-transition: border-color 0.2s;
+	transition: border-color 0.2s;
+}
+
+.cfp-steps li.active {
+	color: #2c3e50;
+	border-bottom-color: #3498db;
+	background: #fff;
+}
+
+.cfp-steps li .cfp-step-num {
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #bdc3c7;
+	color: #fff;
+	font-size: 11px;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+.cfp-steps li.active .cfp-step-num {
+	background: #3498db;
+}
+
+/* ---------- panels ---------- */
+
+.cfp-wrap .panel {
+	border-radius: 6px;
+	-webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+	border: 1px solid #dde3e8;
+	margin-bottom: 20px;
+}
+
+.cfp-wrap .panel-heading {
+	padding: 13px 20px;
+	border-radius: 5px 5px 0 0;
+}
+
+.cfp-wrap .panel-title {
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: 0.3px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	gap: 8px;
+}
+
+.cfp-wrap .panel-title .cfp-step-badge {
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.35);
+	font-size: 11px;
+	font-weight: 700;
+	-ms-flex-negative: 0;
+	flex-shrink: 0;
+}
+
+.cfp-wrap .panel-body {
+	padding: 20px 24px 8px;
+}
+
+/* Section accent colours */
+.cfp-wrap .panel-info    { border-top: 3px solid #5bc0de; }
+.cfp-wrap .panel-success { border-top: 3px solid #5cb85c; }
+.cfp-wrap .panel-warning { border-top: 3px solid #f0ad4e; }
+
+/* ---------- input group addons ---------- */
+
+.cfp-wrap .input-group-addon {
+	background: #f5f5f5;
+	color: #777;
+	border-color: #ccc;
+	min-width: 38px;
+	text-align: center;
+}
+
+/* ---------- country loading ---------- */
+
+.cfp-fetching {
+	-webkit-animation: cfp-pulse 1.2s ease-in-out infinite;
+	animation: cfp-pulse 1.2s ease-in-out infinite;
+	color: #888;
+	font-style: italic;
+	font-size: 0.9em;
+	padding: 6px 0;
+}
+
+/* ---------- country detail panel ---------- */
+
+.cfp-country-detail {
+	margin-top: 16px;
+	border: 1px solid #d6e4ef;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.cfp-detail-header {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	gap: 16px;
+	padding: 14px 18px;
+	background: #eaf4fb;
+	border-bottom: 1px solid #d6e4ef;
+}
+
+.cfp-detail-header .cfp-coat-wrap {
+	margin-left: auto;
+	text-align: center;
+}
+
+.cfp-flag {
+	height: 52px;
+	-o-object-fit: contain;
+	object-fit: contain;
+	border: 1px solid #c9d9e8;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.cfp-coat {
+	max-height: 72px;
+	-o-object-fit: contain;
+	object-fit: contain;
+}
+
+.cfp-info-table {
+	margin-bottom: 0;
+}
+
+.cfp-info-table > tbody > tr > td:first-child {
+	font-weight: 600;
+	white-space: nowrap;
+	padding-right: 20px;
+	color: #555;
+	width: 110px;
+}
+
+.cfp-border-badge {
+	display: inline-block;
+	background: #e8eef3;
+	color: #4a6278;
+	font-size: 0.72em;
+	font-weight: 700;
+	padding: 2px 8px;
+	border-radius: 10px;
+	margin: 2px 2px 2px 0;
+	letter-spacing: 0.4px;
+	border: 1px solid #ccd9e3;
+}
+
+/* ---------- success state animations ---------- */
+
+@keyframes cfp-check-pop {
+	0%   { -webkit-transform: scale(0.25); transform: scale(0.25); opacity: 0; }
+	65%  { -webkit-transform: scale(1.12); transform: scale(1.12); }
+	100% { -webkit-transform: scale(1);    transform: scale(1);    opacity: 1; }
+}
+
+@-webkit-keyframes cfp-check-pop {
+	0%   { -webkit-transform: scale(0.25); opacity: 0; }
+	65%  { -webkit-transform: scale(1.12); }
+	100% { -webkit-transform: scale(1);    opacity: 1; }
+}
+
+@keyframes cfp-fade-up {
+	from { opacity: 0; -webkit-transform: translateY(18px); transform: translateY(18px); }
+	to   { opacity: 1; -webkit-transform: translateY(0);    transform: translateY(0); }
+}
+
+@-webkit-keyframes cfp-fade-up {
+	from { opacity: 0; -webkit-transform: translateY(18px); }
+	to   { opacity: 1; -webkit-transform: translateY(0); }
+}
+
+/* ---------- success state layout ---------- */
+
+.cfp-success-card {
+	background: #fff;
+	border: 1px solid #dde3e8;
+	border-top: 4px solid #27ae60;
+	border-radius: 0 0 8px 8px;
+	-webkit-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	padding: 0 40px 48px;
+	text-align: center;
+}
+
+/* animated checkmark circle */
+
+.cfp-checkmark-wrap {
+	padding: 44px 0 30px;
+}
+
+.cfp-checkmark-circle {
+	width: 92px;
+	height: 92px;
+	border-radius: 50%;
+	background: -webkit-linear-gradient(315deg, #27ae60, #2ecc71);
+	background: linear-gradient(135deg, #27ae60, #2ecc71);
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-shadow: 0 10px 32px rgba(39, 174, 96, 0.38);
+	box-shadow: 0 10px 32px rgba(39, 174, 96, 0.38);
+	-webkit-animation: cfp-check-pop 0.45s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+	animation: cfp-check-pop 0.45s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+}
+
+.cfp-checkmark-icon {
+	color: #fff;
+	font-size: 42px;
+	line-height: 1;
+}
+
+/* title */
+
+.cfp-success-title {
+	color: #1a252f;
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0 0 20px;
+	-webkit-animation: cfp-fade-up 0.4s ease 0.2s both;
+	animation: cfp-fade-up 0.4s ease 0.2s both;
+}
+
+/* message callout box */
+
+.cfp-success-message-box {
+	background: #f0fdf4;
+	border: 1px solid #bbf7d0;
+	border-left: 4px solid #22c55e;
+	border-radius: 6px;
+	padding: 16px 24px;
+	max-width: 540px;
+	margin: 0 auto 32px;
+	text-align: left;
+	-webkit-animation: cfp-fade-up 0.4s ease 0.3s both;
+	animation: cfp-fade-up 0.4s ease 0.3s both;
+}
+
+.cfp-success-message-box p {
+	color: #166534;
+	font-size: 14px;
+	line-height: 1.65;
+	margin: 0;
+}
+
+/* divider */
+
+.cfp-success-divider {
+	border: none;
+	border-top: 1px solid #eef0f2;
+	margin: 0 0 28px;
+}
+
+/* reset button */
+
+.cfp-btn-reset {
+	min-width: 220px;
+	padding: 12px 36px;
+	font-size: 15px;
+	font-weight: 600;
+	border-radius: 50px;
+	letter-spacing: 0.3px;
+	-webkit-animation: cfp-fade-up 0.4s ease 0.42s both;
+	animation: cfp-fade-up 0.4s ease 0.42s both;
+}
+
+.cfp-btn-reset .glyphicon {
+	margin-right: 8px;
+}
+
+/* ---------- submit row ---------- */
+
+.cfp-submit-row {
+	text-align: center;
+	padding: 12px 0 28px;
+	margin-top: 4px;
+}
+
+.cfp-submit-row .btn-submit {
+	min-width: 200px;
+	font-size: 15px;
+	font-weight: 600;
+	padding: 12px 32px;
+	border-radius: 5px;
+	letter-spacing: 0.4px;
+}
+
+.cfp-submit-row .btn-submit .glyphicon {
+	margin-right: 8px;
+}
+
+.cfp-required-note {
+	font-size: 12px;
+	color: #888;
+	margin-top: 10px;
+}

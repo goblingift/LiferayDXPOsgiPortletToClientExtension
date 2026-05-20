@@ -1,227 +1,71 @@
 <%@ include file="/init.jsp" %>
 
+<%
+boolean submitted = "true".equals(renderRequest.getParameter("submitted"));
+String successMessage = portletPreferences.getValue(
+	"successMessage",
+	LanguageUtil.get(request, "success-message-default"));
+%>
+
 <portlet:actionURL name="/contact_form/submit" var="submitURL" />
+<portlet:renderURL var="resetURL" />
 <portlet:resourceURL var="countriesURL" />
 <portlet:resourceURL id="countryDetail" var="countryDetailURL" />
 
-<style>
-	/* ---------- animations ---------- */
-	@keyframes cfp-pulse {
-		0%, 100% { opacity: 1; }
-		50%       { opacity: 0.3; }
-	}
+<liferay-util:html-top>
+	<link href="<%= request.getContextPath() %>/css/contact-form.css" rel="stylesheet" type="text/css" />
+</liferay-util:html-top>
 
-	/* ---------- scope everything under .cfp-wrap ---------- */
-	.cfp-wrap {
-		max-width: 900px;
-	}
+<c:choose>
 
-	/* ---------- form header ---------- */
-	.cfp-header {
-		background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-		color: #fff;
-		border-radius: 8px 8px 0 0;
-		padding: 28px 32px 24px;
-		margin-bottom: 0;
-	}
-	.cfp-header h2 {
-		margin: 0 0 6px;
-		font-size: 22px;
-		font-weight: 700;
-		color: #fff;
-		border: none;
-	}
-	.cfp-header p {
-		margin: 0;
-		opacity: 0.82;
-		font-size: 13px;
-	}
-	.cfp-header .glyphicon {
-		margin-right: 8px;
-		font-size: 20px;
-		vertical-align: middle;
-	}
+<%-- ===== SUCCESS STATE ===== --%>
+<c:when test="<%= submitted %>">
+<div class="cfp-wrap">
 
-	/* ---------- step tracker ---------- */
-	.cfp-steps {
-		display: flex;
-		background: #ecf0f1;
-		border-left: 1px solid #dce1e4;
-		border-right: 1px solid #dce1e4;
-		padding: 0;
-		margin: 0 0 20px;
-		list-style: none;
-	}
-	.cfp-steps li {
-		flex: 1;
-		text-align: center;
-		padding: 10px 8px;
-		font-size: 12px;
-		font-weight: 600;
-		color: #95a5a6;
-		border-bottom: 3px solid transparent;
-		transition: border-color 0.2s;
-	}
-	.cfp-steps li.active {
-		color: #2c3e50;
-		border-bottom-color: #3498db;
-		background: #fff;
-	}
-	.cfp-steps li .cfp-step-num {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		background: #bdc3c7;
-		color: #fff;
-		font-size: 11px;
-		margin-right: 6px;
-		vertical-align: middle;
-	}
-	.cfp-steps li.active .cfp-step-num {
-		background: #3498db;
-	}
+	<div class="cfp-header">
+		<h2>
+			<span class="glyphicon glyphicon-envelope"></span>
+			<liferay-ui:message key="contact-form-portlet" />
+		</h2>
+	</div>
 
-	/* ---------- panels ---------- */
-	.cfp-wrap .panel {
-		border-radius: 6px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-		border: 1px solid #dde3e8;
-		margin-bottom: 20px;
-	}
-	.cfp-wrap .panel-heading {
-		padding: 13px 20px;
-		border-radius: 5px 5px 0 0;
-	}
-	.cfp-wrap .panel-title {
-		font-size: 14px;
-		font-weight: 700;
-		letter-spacing: 0.3px;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-	.cfp-wrap .panel-title .cfp-step-badge {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.35);
-		font-size: 11px;
-		font-weight: 700;
-		flex-shrink: 0;
-	}
-	.cfp-wrap .panel-body {
-		padding: 20px 24px 8px;
-	}
+	<div class="cfp-success-card">
 
-	/* Section accent colours */
-	.cfp-wrap .panel-info    { border-top: 3px solid #5bc0de; }
-	.cfp-wrap .panel-success { border-top: 3px solid #5cb85c; }
-	.cfp-wrap .panel-warning { border-top: 3px solid #f0ad4e; }
+		<%-- Animated checkmark --%>
+		<div class="cfp-checkmark-wrap">
+			<div class="cfp-checkmark-circle">
+				<span class="glyphicon glyphicon-ok cfp-checkmark-icon"></span>
+			</div>
+		</div>
 
-	/* ---------- input group addons ---------- */
-	.cfp-wrap .input-group-addon {
-		background: #f5f5f5;
-		color: #777;
-		border-color: #ccc;
-		min-width: 38px;
-		text-align: center;
-	}
+		<%-- Title --%>
+		<h2 class="cfp-success-title">
+			<liferay-ui:message key="form-submitted-title" />
+		</h2>
 
-	/* ---------- country dropdown ---------- */
-	.cfp-fetching {
-		animation: cfp-pulse 1.2s ease-in-out infinite;
-		color: #888;
-		font-style: italic;
-		font-size: 0.9em;
-		padding: 6px 0;
-	}
+		<%-- Configurable message in a green callout --%>
+		<div class="cfp-success-message-box">
+			<p><%= HtmlUtil.escape(successMessage) %></p>
+		</div>
 
-	/* ---------- country detail panel ---------- */
-	.cfp-country-detail {
-		margin-top: 16px;
-		border: 1px solid #d6e4ef;
-		border-radius: 5px;
-		overflow: hidden;
-	}
-	.cfp-detail-header {
-		display: flex;
-		align-items: center;
-		gap: 16px;
-		padding: 14px 18px;
-		background: #eaf4fb;
-		border-bottom: 1px solid #d6e4ef;
-	}
-	.cfp-detail-header .cfp-coat-wrap {
-		margin-left: auto;
-		text-align: center;
-	}
-	.cfp-flag {
-		height: 52px;
-		object-fit: contain;
-		border: 1px solid #c9d9e8;
-		border-radius: 3px;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-	}
-	.cfp-coat {
-		max-height: 72px;
-		object-fit: contain;
-	}
-	.cfp-info-table {
-		margin-bottom: 0;
-	}
-	.cfp-info-table > tbody > tr > td:first-child {
-		font-weight: 600;
-		white-space: nowrap;
-		padding-right: 20px;
-		color: #555;
-		width: 110px;
-	}
-	.cfp-border-badge {
-		display: inline-block;
-		background: #e8eef3;
-		color: #4a6278;
-		font-size: 0.72em;
-		font-weight: 700;
-		padding: 2px 8px;
-		border-radius: 10px;
-		margin: 2px 2px 2px 0;
-		letter-spacing: 0.4px;
-		border: 1px solid #ccd9e3;
-	}
+		<hr class="cfp-success-divider" />
 
-	/* ---------- submit row ---------- */
-	.cfp-submit-row {
-		text-align: center;
-		padding: 12px 0 28px;
-		margin-top: 4px;
-	}
-	.cfp-submit-row .btn-submit {
-		min-width: 200px;
-		font-size: 15px;
-		font-weight: 600;
-		padding: 12px 32px;
-		border-radius: 5px;
-		letter-spacing: 0.4px;
-	}
-	.cfp-submit-row .btn-submit .glyphicon {
-		margin-right: 8px;
-	}
-	.cfp-required-note {
-		font-size: 12px;
-		color: #888;
-		margin-top: 10px;
-	}
-</style>
+		<%-- Button to start over --%>
+		<a class="btn btn-primary cfp-btn-reset" href="<%= resetURL %>">
+			<span class="glyphicon glyphicon-plus"></span>
+			<liferay-ui:message key="submit-another" />
+		</a>
+
+	</div>
+</div>
+</c:when>
+
+<%-- ===== FORM STATE ===== --%>
+<c:otherwise>
 
 <div class="cfp-wrap">
 
-	<%-- ===== FORM HEADER ===== --%>
+	<%-- Form header --%>
 	<div class="cfp-header">
 		<h2>
 			<span class="glyphicon glyphicon-envelope"></span>
@@ -518,6 +362,9 @@
 	</aui:form>
 </div><%-- /cfp-wrap --%>
 
+</c:otherwise>
+</c:choose>
+
 <aui:script>
 (function () {
 	var ns = '<portlet:namespace />';
@@ -525,14 +372,6 @@
 	function el(id) {
 		return document.getElementById(ns + id);
 	}
-
-	// --- Spinning glyphicon helper ---
-	var style = document.createElement('style');
-	style.textContent =
-		'@-webkit-keyframes spin { 0%{-webkit-transform:rotate(0deg)} 100%{-webkit-transform:rotate(360deg)} }' +
-		'@keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }' +
-		'.spinning { -webkit-animation: spin 1s linear infinite; animation: spin 1s linear infinite; margin-right: 4px; }';
-	document.head.appendChild(style);
 
 	// --- Wrap the aui:input for annualIncome in a Bootstrap input-group with a Euro addon ---
 	(function () {

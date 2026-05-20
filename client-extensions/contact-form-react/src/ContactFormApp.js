@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CountryDetail from './components/CountryDetail';
 import SuccessView from './components/SuccessView';
 
@@ -33,50 +34,50 @@ function mapEmploymentCategory(type) {
 
 // ---- Validation ----
 
-function validate(data, plzValid) {
+function validate(data, plzValid, t) {
 	const errs = {};
 
 	// Personal
 	if (!data.firstName.trim())
-		errs.firstName = 'This field is required.';
+		errs.firstName = t('error_required');
 	if (!data.lastName.trim())
-		errs.lastName = 'This field is required.';
+		errs.lastName = t('error_required');
 	if (!data.email.trim())
-		errs.email = 'This field is required.';
+		errs.email = t('error_required');
 	else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-		errs.email = 'Please enter a valid email address.';
+		errs.email = t('error_email');
 	if (!data.phone.trim())
-		errs.phone = 'This field is required.';
+		errs.phone = t('error_required');
 	else if (!/^[+]?[0-9\s\-()]{7,20}$/.test(data.phone.trim()))
-		errs.phone = 'Please enter a valid phone number (7–20 digits).';
+		errs.phone = t('error_phone');
 	if (!data.dateOfBirth)
-		errs.dateOfBirth = 'This field is required.';
+		errs.dateOfBirth = t('error_required');
 	else if (calcAge(data.dateOfBirth) < 18)
-		errs.dateOfBirth = 'You must be at least 18 years old.';
+		errs.dateOfBirth = t('error_dob_minor');
 
 	// Address
 	if (!data.street.trim())
-		errs.street = 'This field is required.';
+		errs.street = t('error_required');
 	if (!data.houseNumber.trim())
-		errs.houseNumber = 'This field is required.';
+		errs.houseNumber = t('error_required');
 	if (!data.postalCode.trim())
-		errs.postalCode = 'This field is required.';
+		errs.postalCode = t('error_required');
 	else if (!/^[A-Za-z0-9\s-]{3,10}$/.test(data.postalCode.trim()))
-		errs.postalCode = 'Please enter a valid postal code (3–10 characters).';
+		errs.postalCode = t('error_postalCode_format');
 	else if (data.country === 'Germany' && plzValid === false)
-		errs.postalCode = 'This postal code was not found in Germany.';
+		errs.postalCode = t('error_postalCode_notFound');
 	if (!data.city.trim())
-		errs.city = 'This field is required.';
+		errs.city = t('error_required');
 	if (!data.country)
-		errs.country = 'Please select a country.';
+		errs.country = t('error_country');
 
 	// Employment
 	if (!data.employmentType)
-		errs.employmentType = 'Please select an employment type.';
+		errs.employmentType = t('error_employment');
 	if (data.annualIncome === '')
-		errs.annualIncome = 'This field is required.';
+		errs.annualIncome = t('error_required');
 	else if (parseFloat(data.annualIncome) < 0)
-		errs.annualIncome = 'Annual income must be 0 or greater.';
+		errs.annualIncome = t('error_income');
 
 	return errs;
 }
@@ -114,6 +115,7 @@ const INITIAL_FORM = {
 // ---- Main app component ----
 
 export default function ContactFormApp({ successMessage }) {
+	const { t } = useTranslation();
 	const [formData, setFormData]             = useState(INITIAL_FORM);
 	const [errors, setErrors]                 = useState({});
 	const [submitted, setSubmitted]           = useState(false);
@@ -225,7 +227,7 @@ export default function ContactFormApp({ successMessage }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const errs = validate(formData, plzValid);
+		const errs = validate(formData, plzValid, t);
 		if (Object.keys(errs).length > 0) {
 			setErrors(errs);
 			return;
@@ -284,15 +286,15 @@ export default function ContactFormApp({ successMessage }) {
 
 			{/* Page header */}
 			<div className="cfp-page-header">
-				<h1 className="cfp-page-title">Contact Form</h1>
+				<h1 className="cfp-page-title">{t('title')}</h1>
 				<p className="cfp-page-subtitle">
-					Complete all three sections. Fields marked <strong>*</strong> are required.
+					{t('subtitle')}
 				</p>
 			</div>
 
-			{/* Hays-style step tabs */}
+			{/* Step tabs */}
 			<div className="cfp-tabs">
-				{['Personal Information', 'Address', 'Employment & Finances'].map((label, i) => (
+				{[t('tab_personal'), t('tab_address'), t('tab_employment')].map((label, i) => (
 					<span key={i} className={`cfp-tab${activeSection === i ? ' active' : ''}`}>
 						<span className="cfp-tab-num">{i + 1}</span>
 						{label}
@@ -306,34 +308,34 @@ export default function ContactFormApp({ successMessage }) {
 				<div className="cfp-section cfp-section-personal" onFocus={() => setActiveSection(0)}>
 					<h3 className="cfp-section-title">
 						<span className="cfp-section-num">1</span>
-						Personal Information
+						{t('section_personal')}
 					</h3>
 
 					<div className="row">
 						<div className="col-sm-6">
-							<Field label="First Name" name="firstName" value={formData.firstName}
+							<Field label={t('label_firstName')} name="firstName" value={formData.firstName}
 								onChange={handleChange} error={errors.firstName} required />
 						</div>
 						<div className="col-sm-6">
-							<Field label="Last Name" name="lastName" value={formData.lastName}
+							<Field label={t('label_lastName')} name="lastName" value={formData.lastName}
 								onChange={handleChange} error={errors.lastName} required />
 						</div>
 					</div>
 
 					<div className="row">
 						<div className="col-sm-6">
-							<Field label="Email Address" name="email" type="email" value={formData.email}
+							<Field label={t('label_email')} name="email" type="email" value={formData.email}
 								onChange={handleChange} error={errors.email} required />
 						</div>
 						<div className="col-sm-6">
-							<Field label="Phone Number" name="phone" value={formData.phone}
+							<Field label={t('label_phone')} name="phone" value={formData.phone}
 								onChange={handleChange} error={errors.phone} required />
 						</div>
 					</div>
 
 					<div className="row">
 						<div className="col-sm-5">
-							<Field label="Date of Birth" name="dateOfBirth" type="date"
+							<Field label={t('label_dob')} name="dateOfBirth" type="date"
 								value={formData.dateOfBirth} onChange={handleChange}
 								error={errors.dateOfBirth} required />
 						</div>
@@ -344,16 +346,16 @@ export default function ContactFormApp({ successMessage }) {
 				<div className="cfp-section cfp-section-address" onFocus={() => setActiveSection(1)}>
 					<h3 className="cfp-section-title">
 						<span className="cfp-section-num">2</span>
-						Address
+						{t('section_address')}
 					</h3>
 
 					<div className="row">
 						<div className="col-sm-8">
-							<Field label="Street" name="street" value={formData.street}
+							<Field label={t('label_street')} name="street" value={formData.street}
 								onChange={handleChange} error={errors.street} required />
 						</div>
 						<div className="col-sm-4">
-							<Field label="House Number" name="houseNumber" value={formData.houseNumber}
+							<Field label={t('label_houseNumber')} name="houseNumber" value={formData.houseNumber}
 								onChange={handleChange} error={errors.houseNumber} required />
 						</div>
 					</div>
@@ -363,7 +365,7 @@ export default function ContactFormApp({ successMessage }) {
 							{/* Postal code with German PLZ live validation */}
 							<div className="form-group">
 								<label className="control-label">
-									Postal Code <span className="text-danger">*</span>
+									{t('label_postalCode')} <span className="text-danger">*</span>
 								</label>
 								<div className="cfp-plz-wrap">
 									<input
@@ -400,7 +402,7 @@ export default function ContactFormApp({ successMessage }) {
 							</div>
 						</div>
 						<div className="col-sm-9">
-							<Field label="City" name="city" value={formData.city}
+							<Field label={t('label_city')} name="city" value={formData.city}
 								onChange={handleChange} error={errors.city} required />
 						</div>
 					</div>
@@ -408,12 +410,12 @@ export default function ContactFormApp({ successMessage }) {
 					{/* Country dropdown */}
 					<div className="form-group">
 						<label className="control-label">
-							Country <span className="text-danger">*</span>
+							{t('label_country')} <span className="text-danger">*</span>
 						</label>
 						{countriesLoading ? (
 							<div className="cfp-fetching">
 								<span className="glyphicon glyphicon-refresh spinning" />
-								{' '}Fetching countries...
+								{' '}{t('fetching_countries')}
 							</div>
 						) : (
 							<select
@@ -422,7 +424,7 @@ export default function ContactFormApp({ successMessage }) {
 								value={formData.country}
 								onChange={handleChange}
 							>
-								<option value="">-- Please select --</option>
+								<option value="">{t('placeholder_select')}</option>
 								{countries.map(c => <option key={c} value={c}>{c}</option>)}
 							</select>
 						)}
@@ -439,14 +441,14 @@ export default function ContactFormApp({ successMessage }) {
 				<div className="cfp-section cfp-section-employment" onFocus={() => setActiveSection(2)}>
 					<h3 className="cfp-section-title">
 						<span className="cfp-section-num">3</span>
-						Employment &amp; Finances
+						{t('section_employment')}
 					</h3>
 
 					<div className="row">
 						<div className="col-sm-6">
 							<div className="form-group">
 								<label className="control-label">
-									Employment Type <span className="text-danger">*</span>
+									{t('label_employmentType')} <span className="text-danger">*</span>
 								</label>
 								<select
 									className={`form-control${errors.employmentType ? ' cfp-input-error' : ''}`}
@@ -454,12 +456,12 @@ export default function ContactFormApp({ successMessage }) {
 									value={formData.employmentType}
 									onChange={handleChange}
 								>
-									<option value="">-- Please select --</option>
-									<option value="employed">Employed</option>
-									<option value="self-employed">Self-Employed</option>
-									<option value="unemployed">Unemployed</option>
-									<option value="student">Student</option>
-									<option value="retired">Retired</option>
+									<option value="">{t('placeholder_select')}</option>
+									<option value="employed">{t('employment_employed')}</option>
+									<option value="self-employed">{t('employment_selfEmployed')}</option>
+									<option value="unemployed">{t('employment_unemployed')}</option>
+									<option value="student">{t('employment_student')}</option>
+									<option value="retired">{t('employment_retired')}</option>
 								</select>
 								{errors.employmentType && (
 									<small className="cfp-field-error">{errors.employmentType}</small>
@@ -469,7 +471,7 @@ export default function ContactFormApp({ successMessage }) {
 						<div className="col-sm-6">
 							<div className="form-group">
 								<label className="control-label">
-									Annual Income (EUR) <span className="text-danger">*</span>
+									{t('label_annualIncome')} <span className="text-danger">*</span>
 								</label>
 								<div className="input-group">
 									<span className="input-group-addon cfp-income-addon">
@@ -496,10 +498,10 @@ export default function ContactFormApp({ successMessage }) {
 				{/* Submit footer */}
 				<div className="cfp-form-footer">
 					<button className="cfp-btn-senden" type="submit">
-						Submit
+						{t('btn_submit')}
 					</button>
 					<p className="cfp-required-note">
-						<span className="text-danger">*</span> Required fields
+						<span className="text-danger">*</span> {t('required_note')}
 					</p>
 				</div>
 

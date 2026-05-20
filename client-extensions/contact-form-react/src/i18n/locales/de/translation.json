@@ -1,0 +1,51 @@
+{
+	"title": "Kontaktformular",
+	"subtitle": "Bitte alle drei Abschnitte ausfüllen. Felder mit * sind Pflichtfelder.",
+
+	"tab_personal": "Persönliche Daten",
+	"tab_address": "Adresse",
+	"tab_employment": "Beschäftigung & Finanzen",
+
+	"section_personal": "Persönliche Daten",
+	"section_address": "Adresse",
+	"section_employment": "Beschäftigung & Finanzen",
+
+	"label_firstName": "Vorname",
+	"label_lastName": "Nachname",
+	"label_email": "E-Mail-Adresse",
+	"label_phone": "Telefonnummer",
+	"label_dob": "Geburtsdatum",
+	"label_street": "Straße",
+	"label_houseNumber": "Hausnummer",
+	"label_postalCode": "Postleitzahl",
+	"label_city": "Stadt",
+	"label_country": "Land",
+	"label_employmentType": "Beschäftigungsart",
+	"label_annualIncome": "Jahreseinkommen (EUR)",
+
+	"placeholder_select": "-- Bitte auswählen --",
+
+	"employment_employed": "Angestellt",
+	"employment_selfEmployed": "Selbstständig",
+	"employment_unemployed": "Arbeitslos",
+	"employment_student": "Student/in",
+	"employment_retired": "Rentner/in",
+
+	"error_required": "Dieses Feld ist ein Pflichtfeld.",
+	"error_email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+	"error_phone": "Bitte geben Sie eine gültige Telefonnummer ein (7–20 Ziffern).",
+	"error_dob_minor": "Sie müssen mindestens 18 Jahre alt sein.",
+	"error_postalCode_format": "Bitte geben Sie eine gültige Postleitzahl ein (3–10 Zeichen).",
+	"error_postalCode_notFound": "Diese Postleitzahl wurde in Deutschland nicht gefunden.",
+	"error_country": "Bitte wählen Sie ein Land aus.",
+	"error_employment": "Bitte wählen Sie eine Beschäftigungsart aus.",
+	"error_income": "Das Jahreseinkommen muss 0 oder größer sein.",
+
+	"fetching_countries": "Länder werden geladen...",
+	"btn_submit": "Absenden",
+	"required_note": "Pflichtfelder",
+
+	"success_header": "Kontaktformular",
+	"success_title": "Formular erfolgreich abgesendet!",
+	"btn_reset": "Weiteres Formular absenden"
+}

@@ -1,0 +1,51 @@
+{
+	"title": "Contact Form",
+	"subtitle": "Complete all three sections. Fields marked * are required.",
+
+	"tab_personal": "Personal Information",
+	"tab_address": "Address",
+	"tab_employment": "Employment & Finances",
+
+	"section_personal": "Personal Information",
+	"section_address": "Address",
+	"section_employment": "Employment & Finances",
+
+	"label_firstName": "First Name",
+	"label_lastName": "Last Name",
+	"label_email": "Email Address",
+	"label_phone": "Phone Number",
+	"label_dob": "Date of Birth",
+	"label_street": "Street",
+	"label_houseNumber": "House Number",
+	"label_postalCode": "Postal Code",
+	"label_city": "City",
+	"label_country": "Country",
+	"label_employmentType": "Employment Type",
+	"label_annualIncome": "Annual Income (EUR)",
+
+	"placeholder_select": "-- Please select --",
+
+	"employment_employed": "Employed",
+	"employment_selfEmployed": "Self-Employed",
+	"employment_unemployed": "Unemployed",
+	"employment_student": "Student",
+	"employment_retired": "Retired",
+
+	"error_required": "This field is required.",
+	"error_email": "Please enter a valid email address.",
+	"error_phone": "Please enter a valid phone number (7–20 digits).",
+	"error_dob_minor": "You must be at least 18 years old.",
+	"error_postalCode_format": "Please enter a valid postal code (3–10 characters).",
+	"error_postalCode_notFound": "This postal code was not found in Germany.",
+	"error_country": "Please select a country.",
+	"error_employment": "Please select an employment type.",
+	"error_income": "Annual income must be 0 or greater.",
+
+	"fetching_countries": "Fetching countries...",
+	"btn_submit": "Submit",
+	"required_note": "Required fields",
+
+	"success_header": "Contact Form",
+	"success_title": "Form Submitted Successfully!",
+	"btn_reset": "Submit Another Response"
+}

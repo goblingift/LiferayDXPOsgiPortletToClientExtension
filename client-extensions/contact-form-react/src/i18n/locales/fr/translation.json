@@ -1,0 +1,51 @@
+{
+	"title": "Formulaire de contact",
+	"subtitle": "Remplissez les trois sections. Les champs marqués * sont obligatoires.",
+
+	"tab_personal": "Informations personnelles",
+	"tab_address": "Adresse",
+	"tab_employment": "Emploi & Finances",
+
+	"section_personal": "Informations personnelles",
+	"section_address": "Adresse",
+	"section_employment": "Emploi & Finances",
+
+	"label_firstName": "Prénom",
+	"label_lastName": "Nom de famille",
+	"label_email": "Adresse e-mail",
+	"label_phone": "Numéro de téléphone",
+	"label_dob": "Date de naissance",
+	"label_street": "Rue",
+	"label_houseNumber": "Numéro",
+	"label_postalCode": "Code postal",
+	"label_city": "Ville",
+	"label_country": "Pays",
+	"label_employmentType": "Type d'emploi",
+	"label_annualIncome": "Revenu annuel (EUR)",
+
+	"placeholder_select": "-- Veuillez sélectionner --",
+
+	"employment_employed": "Salarié(e)",
+	"employment_selfEmployed": "Indépendant(e)",
+	"employment_unemployed": "Sans emploi",
+	"employment_student": "Étudiant(e)",
+	"employment_retired": "Retraité(e)",
+
+	"error_required": "Ce champ est obligatoire.",
+	"error_email": "Veuillez saisir une adresse e-mail valide.",
+	"error_phone": "Veuillez saisir un numéro de téléphone valide (7 à 20 chiffres).",
+	"error_dob_minor": "Vous devez avoir au moins 18 ans.",
+	"error_postalCode_format": "Veuillez saisir un code postal valide (3 à 10 caractères).",
+	"error_postalCode_notFound": "Ce code postal n'a pas été trouvé en Allemagne.",
+	"error_country": "Veuillez sélectionner un pays.",
+	"error_employment": "Veuillez sélectionner un type d'emploi.",
+	"error_income": "Le revenu annuel doit être supérieur ou égal à 0.",
+
+	"fetching_countries": "Chargement des pays...",
+	"btn_submit": "Envoyer",
+	"required_note": "Champs obligatoires",
+
+	"success_header": "Formulaire de contact",
+	"success_title": "Formulaire soumis avec succès !",
+	"btn_reset": "Soumettre une autre réponse"
+}

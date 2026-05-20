@@ -1,11 +1,14 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function SuccessView({ message, onReset }) {
+	const { t } = useTranslation();
+
 	return (
 		<div className="cfp-wrap">
 
 			<div className="cfp-success-page-header">
-				<h2>Contact Form</h2>
+				<h2>{t('success_header')}</h2>
 			</div>
 
 			<div className="cfp-success-card">
@@ -18,7 +21,7 @@ export default function SuccessView({ message, onReset }) {
 				</div>
 
 				{/* Title */}
-				<h2 className="cfp-success-title">Form Submitted Successfully!</h2>
+				<h2 className="cfp-success-title">{t('success_title')}</h2>
 
 				{/* Configurable message in green callout */}
 				<div className="cfp-success-message-box">
@@ -30,7 +33,7 @@ export default function SuccessView({ message, onReset }) {
 				{/* Reset button */}
 				<button className="cfp-btn-reset" onClick={onReset} type="button">
 					<span className="glyphicon glyphicon-plus" />
-					{' '}Submit Another Response
+					{' '}{t('btn_reset')}
 				</button>
 
 			</div>

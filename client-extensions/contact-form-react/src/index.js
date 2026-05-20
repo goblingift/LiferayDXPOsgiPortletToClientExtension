@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import ContactFormApp from './ContactFormApp';
 import './css/contact-form.css';
+import './i18n/index.js';
 
 /**
  * Web component wrapper for the Contact Form React Client Extension.

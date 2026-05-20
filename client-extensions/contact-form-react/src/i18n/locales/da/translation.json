@@ -1,0 +1,51 @@
+{
+	"title": "Kontaktformular",
+	"subtitle": "Udfyld alle tre sektioner. Felter markeret med * er obligatoriske.",
+
+	"tab_personal": "Personlige oplysninger",
+	"tab_address": "Adresse",
+	"tab_employment": "Beskæftigelse & Økonomi",
+
+	"section_personal": "Personlige oplysninger",
+	"section_address": "Adresse",
+	"section_employment": "Beskæftigelse & Økonomi",
+
+	"label_firstName": "Fornavn",
+	"label_lastName": "Efternavn",
+	"label_email": "E-mailadresse",
+	"label_phone": "Telefonnummer",
+	"label_dob": "Fødselsdato",
+	"label_street": "Gade",
+	"label_houseNumber": "Husnummer",
+	"label_postalCode": "Postnummer",
+	"label_city": "By",
+	"label_country": "Land",
+	"label_employmentType": "Ansættelsestype",
+	"label_annualIncome": "Årlig indkomst (EUR)",
+
+	"placeholder_select": "-- Vælg venligst --",
+
+	"employment_employed": "Ansat",
+	"employment_selfEmployed": "Selvstændig",
+	"employment_unemployed": "Arbejdsløs",
+	"employment_student": "Studerende",
+	"employment_retired": "Pensioneret",
+
+	"error_required": "Dette felt er obligatorisk.",
+	"error_email": "Indtast venligst en gyldig e-mailadresse.",
+	"error_phone": "Indtast venligst et gyldigt telefonnummer (7–20 cifre).",
+	"error_dob_minor": "Du skal være mindst 18 år gammel.",
+	"error_postalCode_format": "Indtast venligst et gyldigt postnummer (3–10 tegn).",
+	"error_postalCode_notFound": "Dette postnummer blev ikke fundet i Tyskland.",
+	"error_country": "Vælg venligst et land.",
+	"error_employment": "Vælg venligst en ansættelsestype.",
+	"error_income": "Den årlige indkomst skal være 0 eller større.",
+
+	"fetching_countries": "Henter lande...",
+	"btn_submit": "Indsend",
+	"required_note": "Obligatoriske felter",
+
+	"success_header": "Kontaktformular",
+	"success_title": "Formular indsendt!",
+	"btn_reset": "Indsend et andet svar"
+}
